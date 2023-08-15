@@ -1,0 +1,43 @@
+{% extends 'base.html' %} 
+{% load static %}
+
+{% block main %}
+	<div id="files-container">
+		<div id="bar-container">
+			<div id="directory-tree">
+				<div class="btns-container">
+					{% for i,j in names.items %}
+						<div class="btn-bar"><div class="first-triangles"></div><a href="{{i}}" class="tree"><p class="inside-text">{{j}}</p></a><div class="triangles"></div></div>
+					{% endfor %}
+				</div>
+			</div>
+			<form method="POST" action="" id="create-folder-form">{% csrf_token %}
+				<input type="text" name="folder_name" id="folder_name">
+				<button type="submit" name="new_folder" class="upper-btns"><img src="{% static 'pics/add-folder.png' %}" class="upper-icons"></button>
+			</form>
+		</div>
+		<div id="folders">
+			{% for i in dir %}
+				<div class="folder-container" id="folder{{i}}" onmouseleave="hide_fields()">
+					<div class="folders">
+						<button class="dots" id="{{i}}" onclick="show_cans(this.id)"><img src="{% static 'pics/dots.png' %}"></button>
+						<form method="POST" action="">{% csrf_token %}
+							<input type="hidden" name="folder_to_delete" value="{{i}}">
+							<button type="submit" name="delete" id="delete{{i}}" value="{{i}}" class="cans"><img src="{% static 'pics/trash-red.png' %}" class="dlt-pic"></button>
+						</form>
+						<a href="" class="folder-pic"><img src="{% static 'pics/folder.png' %}"></a>
+						<div id="rename-div{{i}}">
+							<input type="text" name="new_name" class="name-fields" id="new_name{{i}}" placeholder="{{i}}" form="edition-form{{i}}" style="position: absolute;">
+							<p id="folderName{{i}}" class="fl_name" onclick="show_fields(this.id)">{{i}}</p>
+						</div>
+						<form method="POST" action="" id="edition-form{{i}}">{% csrf_token %}
+							<input type="hidden" name="previous_name" value="{{i}}">
+							<input type="submit" name="edit_name" id="edit{{i}}">
+						</form>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	<script type="text/javascript" src="{% static 'js/cloud.js' %}"></script>
+{% endblock %}
